@@ -1,4 +1,6 @@
-﻿using Utilities;
+﻿using EmployeeDemo;
+using ExtensionMethodsDemo;
+using Utilities;
 
 namespace MethodsDemo
 {
@@ -97,6 +99,14 @@ namespace MethodsDemo
     {
         static void Main(string[] args)
         {
+            Employee dave = new Employee(1, "Dave", "Smith", 30);
+            dave.Print();
+            dave.DoubleTheAge();
+            dave.Print();
+        }
+
+        static void StudentDemo()
+        {
             var alice = new Student("Alice", 20);
             alice.Print();
 
@@ -108,6 +118,8 @@ namespace MethodsDemo
 
             var charlie = new Student("Charlie", 26);
             charlie.Print();
+
+
         }
     }
 }
