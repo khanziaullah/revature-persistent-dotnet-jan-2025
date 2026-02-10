@@ -1,5 +1,23 @@
 ﻿namespace DelegatesDemo;
 
+public class OnClickEventArgs : EventArgs
+{
+    public string ButtonName { get; set; }
+}
+// Publisher
+public class Button
+{
+    public delegate void OnClickHandler();
+    public event OnClickHandler OnClick;
+
+    // Informing subscribers that the button was clicked
+
+    public void Click()
+    {
+        OnClick?.Invoke();
+    }
+}
+
 class Program
 {
     static void Main(string[] args)
@@ -8,8 +26,20 @@ class Program
         //app.DelegateDemo();
         //app.AnonymousMethodDemo();
         // app.LambdaExpressionDemo();
+        // app.HigherOrderFunctionDemo();
 
-        app.HigherOrderFunctionDemo();
+        Button button = new Button();
+
+        // Subscriber Dool bell
+        button.OnClick += () => Console.WriteLine("Bill Rings!");
+
+        // Subscriber Electricity Board
+        button.OnClick += () => Console.WriteLine("Charge for Electricity!");
+        button.OnClick += () => Console.WriteLine("third!");
+        button.OnClick += () => Console.WriteLine("Fourth!");
+
+        // Raise Event
+        button.Click();
     }
 }
 
