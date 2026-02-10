@@ -5,7 +5,11 @@ class Program
     static void Main(string[] args)
     {
         DelegatesDemoApp app = new DelegatesDemoApp();
-        app.Run();
+        //app.DelegateDemo();
+        //app.AnonymousMethodDemo();
+        // app.LambdaExpressionDemo();
+
+        // app.HigherOrderFunctionDemo();
     }
 }
 
@@ -23,6 +27,34 @@ delegate void GenericTwoParameterAtion<TFirst, TSecond>(TFirst a, TSecond b);
 class DelegatesDemoApp
 {
 
+
+    int Square(int x)
+    {
+        return x * x;
+    }
+    public void LambdaExpressionDemo()
+    {
+        Func<int, int> f;
+
+        f = (int x) => x * x;
+
+        var result = f(5);
+
+        Console.WriteLine($"result: {result}");
+    }
+
+    public void AnonymousMethodDemo()
+    {
+        // Using an anonymous method with a delegate
+        MathOperation operation = delegate (int a, int b)
+        {
+            Console.WriteLine($"The sum of {a} and {b} is: {a + b}");
+            return a + b;
+        };
+
+        operation(5, 3);
+    }
+
     void PrintMessage(string message)
     {
         Console.WriteLine(message);
@@ -33,7 +65,7 @@ class DelegatesDemoApp
         return number % 2 == 0;
     }
 
-    public void Run()
+    public void DelegateDemo()
     {
         // MathOperation operation = Add;
         // GenericTwoParameterFunction<int, int, int> genericOperation = Add;
