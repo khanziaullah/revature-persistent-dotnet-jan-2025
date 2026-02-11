@@ -1,117 +1,140 @@
-﻿var processor = new OrderProcessor();
+// System.IndexOutOfRangeException
 
-processor.Process("SKU-100", 2);
-processor.Process("", -1);
-processor.Process("SKU-999", 1);
-processor.Process("SKU-200", 3);
+// var array = new int[] { 1, 2, 3, 4, 5 };
 
-public class OrderProcessor
+// var item = array[10];
+
+// System.NullReferenceException:
+// string message = null;
+
+// Console.WriteLine(message.ToUpper());
+
+// System.DivideByZeroException: Attempted to divide by zero.
+// var numerator = 10;
+// var denominator = 0;
+
+// Console.WriteLine(numerator / denominator);
+
+// System.IO.FileNotFoundException:
+// var allText = System.IO.File.ReadAllText("No this file does not exist.txt");
+// Console.WriteLine(allText);
+
+// try
+// {
+//     var numerator = 10;
+//     var denominator = 0;
+
+//     var result = numerator / denominator;
+
+//     Console.WriteLine($"Division result: {result}" );
+// }
+// // pefectly valid catch block
+// // catch
+
+// // catch (Exception ex) when (ex is DivideByZeroException || ex is NullReferenceException)
+// catch (DivideByZeroException ex)
+// {
+//     Console.WriteLine("Cannot divide by zero. Please provide a non-zero denominator.");
+//     Console.WriteLine($"Error details: {ex.Message}");
+//     Console.WriteLine($"Stack Trace: {ex.StackTrace}");
+// }
+
+// Console.WriteLine("Hello, World!");
+try
 {
-    private readonly Dictionary<string, decimal> _catalog = new()
-    {
-        ["SKU-100"] = 29.99m,
-        ["SKU-200"] = 49.99m,
-        ["SKU-300"] = 99.99m
-    };
-
-    private readonly List<Order> _savedOrders = [];
-
-    public void Process(string sku, int quantity)
-    {
-        try
-        {
-            var order = CreateOrder(sku, quantity);
-            Save(order);
-            Console.WriteLine($"Saved order: {order.Sku}, qty {order.Quantity}, total {order.Total}");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Failed to process order: {ex.Message}");
-        }
-        finally
-        {
-            // _savedOrders.Clear();
-            Console.WriteLine("Process :: Inside Finally");
-        }
-    }
-
-    private Order CreateOrder(string sku, int quantity)
-    {
-        try
-        {
-            Validate(sku, quantity);
-            var price = LookupPrice(sku);
-            return new Order(sku, quantity, price * quantity);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error creating order: {ex.Message}");
-            throw;
-        }
-        finally
-        {
-            Console.WriteLine("CreateOrder :: Inside Finally");
-        }
-    }
-
-    private void Validate(string sku, int quantity)
-    {
-        try
-        {
-            if (string.IsNullOrWhiteSpace(sku))
-                throw new ArgumentException("SKU is required");
-
-            if (quantity <= 0)
-                throw new ArgumentException("Quantity must be positive");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Validation failed: {ex.Message}");
-            throw;
-        }
-        finally
-        {
-            Console.WriteLine("Validate :: Inside Finally");
-        }
-    }
-
-    private decimal LookupPrice(string sku)
-    {
-        try
-        {
-            if (!_catalog.TryGetValue(sku, out var price))
-                throw new KeyNotFoundException($"Unknown SKU: {sku}");
-
-            return price;
-        }
-        catch (Exception)
-        {
-            throw;
-        }
-        finally
-        {
-            Console.WriteLine("LookupPrice :: Inside Finally");
-        }
-    }
-
-    private void Save(Order order)
-    {
-        try
-        {
-            if (Random.Shared.Next(5) == 0)
-                throw new IOException("Connection timeout");
-
-            _savedOrders.Add(order);
-        }
-        catch (IOException)
-        {
-            Console.WriteLine("Save failed, continuing...");
-        }
-        finally
-        {
-            Console.WriteLine("Save :: Inside Finally");
-        }
-    }
-
+    First();
 }
-public record Order(string Sku, int Quantity, decimal Total);
+// catch
+// {
+// Empty catch type wont work
+// }
+catch (DivideByZeroException ex)
+{
+    Console.WriteLine($"An error occurred: {ex.Message}");
+    Console.WriteLine($"Stack Trace: {ex.StackTrace}");
+    // var numerator = 10;
+    // var denominator = 0;
+
+    // var result = numerator / denominator;
+    // Console.WriteLine($"Division result: {result}");
+}
+// Generic Exceptions towards the end
+catch (Exception ex)
+{
+    Console.WriteLine($"An error occurred: {ex.Message}");
+    Console.WriteLine($"Stack Trace: {ex.StackTrace}");
+    Console.WriteLine($"Inner Exception: {ex.InnerException}");
+}
+finally
+{
+    // house keeping
+    Console.WriteLine("finally.");
+}
+
+Console.WriteLine("Program continues after handling the exception.");
+
+void First()
+{
+    Second();
+}
+
+void Second()
+{
+    try
+    {
+        Third();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Exception From Third: {ex.Message}");
+        // Good rethrow
+        // throw;
+
+        // Bad rethrow
+        // throw ex;
+        // throw new Exception("My Exception here");
+        throw new Exception("My Exception here", ex);
+    }
+}
+
+void Third()
+{
+    var numerator = 10;
+    var denominator = 0;
+
+    var result = numerator / denominator;
+}
+
+
+void AcceptPayment(decimal amount, decimal balance)
+{
+    if (amount > balance)
+    {
+        throw new NotEnoughBalanceException("Not enough balance to complete the payment.");
+    }
+
+    Console.WriteLine("Payment accepted.");
+}
+
+
+class BankException : ApplicationException
+{
+    public BankException(string message) : base(message)
+    {
+    }
+
+    public BankException(string message, Exception innerException) : base(message, innerException)
+    {
+    }
+}
+
+class NotEnoughBalanceException : BankException
+{
+    public NotEnoughBalanceException(string message) : base(message)
+    {
+    }
+
+    public NotEnoughBalanceException(string message, Exception innerException) : base(message, innerException)
+    {
+    }
+}
