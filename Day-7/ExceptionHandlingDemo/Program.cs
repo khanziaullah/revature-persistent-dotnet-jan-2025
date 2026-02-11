@@ -28,6 +28,11 @@ public class OrderProcessor
         {
             Console.WriteLine($"Failed to process order: {ex.Message}");
         }
+        finally
+        {
+            // _savedOrders.Clear();
+            Console.WriteLine("Process :: Inside Finally");
+        }
     }
 
     private Order CreateOrder(string sku, int quantity)
@@ -42,6 +47,10 @@ public class OrderProcessor
         {
             Console.WriteLine($"Error creating order: {ex.Message}");
             throw;
+        }
+        finally
+        {
+            Console.WriteLine("CreateOrder :: Inside Finally");
         }
     }
 
@@ -60,6 +69,10 @@ public class OrderProcessor
             Console.WriteLine($"Validation failed: {ex.Message}");
             throw;
         }
+        finally
+        {
+            Console.WriteLine("Validate :: Inside Finally");
+        }
     }
 
     private decimal LookupPrice(string sku)
@@ -75,6 +88,10 @@ public class OrderProcessor
         {
             throw;
         }
+        finally
+        {
+            Console.WriteLine("LookupPrice :: Inside Finally");
+        }
     }
 
     private void Save(Order order)
@@ -89,6 +106,10 @@ public class OrderProcessor
         catch (IOException)
         {
             Console.WriteLine("Save failed, continuing...");
+        }
+        finally
+        {
+            Console.WriteLine("Save :: Inside Finally");
         }
     }
 
