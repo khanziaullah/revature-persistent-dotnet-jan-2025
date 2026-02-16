@@ -38,7 +38,10 @@ try
     // ExecuteScalar(connection);
 
     // SQL Data Adapater
-    SqlDataAdapeterDemo(connection);
+    // SqlDataAdapeterDemo(connection);
+
+    // Insert Customer Demo
+    InsertCustomerDemo(connection);
 }
 catch (Exception ex)
 {
@@ -49,6 +52,33 @@ finally
 {
     connection.Close();
 }
+
+void InsertCustomerDemo(SqlConnection connection)
+{
+    var dataSet = new DataSet();
+    var selectQuery = "SELECT * FROM Customers";
+    using var selectCommand = new SqlCommand(selectQuery, connection);
+    using var adapter = new SqlDataAdapter(selectCommand);
+    adapter.Fill(dataSet, "Customers");
+
+    var dataTable = dataSet.Tables["Customers"];
+
+    var newRow = dataTable.NewRow();
+    newRow["Id"] = 2;
+    newRow["Name"] = "New Customer";
+    newRow["Age"] = 28;
+
+
+
+    adapter.InsertCommand = new SqlCommand("INSERT INTO Customers (Id, Name, Age) VALUES (@Id, @Name, @Age)", connection);
+
+    adapter.InsertCommand.Parameters.Add("@Id", SqlDbType.Int, 6, "Id");
+    adapter.InsertCommand.Parameters.Add("@Name", SqlDbType.NVarChar, 50, "Name");
+    adapter.InsertCommand.Parameters.Add("@Age", SqlDbType.Int, 0, "Age");
+
+    dataSet.AcceptChanges();
+}
+
 
 void SqlDataAdapeterDemo(SqlConnection connection)
 {
