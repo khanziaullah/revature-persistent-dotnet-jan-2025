@@ -41,7 +41,13 @@ try
     // SqlDataAdapeterDemo(connection);
 
     // Insert Customer Demo
-    InsertCustomerDemo(connection);
+    // InsertCustomerDemo(connection);
+
+    // SQL Injection Demo
+    // SqlInjectionDemo(connection);
+
+    // Parameterized Query Demo
+    ParameterizedQueryDemo(connection);
 }
 catch (Exception ex)
 {
@@ -51,6 +57,55 @@ catch (Exception ex)
 finally
 {
     connection.Close();
+}
+
+void ParameterizedQueryDemo(SqlConnection connection)
+{
+    using (SqlCommand command = new SqlCommand(
+        "SELECT * FROM Customers WHERE Name LIKE @Name",
+        connection))
+
+    {
+        // var id = "3";
+        // var id = "3 or 1 = 1";
+        // var id = "3 or 1 = 1";
+        // Add parameters - database treats them as DATA, never as SQL code
+        var name = "John or 1 = 1";
+        command.Parameters.AddWithValue("@Name", name);
+
+        using SqlDataReader reader = command.ExecuteReader();
+        if (reader.Read())
+        {
+            Console.WriteLine($"Id: {reader["Id"]}, Name: {reader["Name"]}, Age: {reader["Age"]}");
+        }
+        else
+        {
+            Console.WriteLine("No customer found with the specified Id.");
+        }
+    }
+}
+
+void SqlInjectionDemo(SqlConnection connection)
+{
+    // Query: SELECT * FROM Customers WHERE Id = 1 or 1 = 1
+    var userInput = "1 or 1 = 1";
+    // var userInput = "1; DROP TABLE Customers; ";
+    // var userInput = "3";
+    var query = $"SELECT * FROM Customers WHERE Id = {userInput}";
+
+    using var command = new SqlCommand(query, connection);
+    try
+    {
+        using var reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+            Console.WriteLine($"Id: {reader["Id"]}, Name: {reader["Name"]}, Age: {reader["Age"]}");
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error executing query: {ex.Message}");
+    }
 }
 
 void InsertCustomerDemo(SqlConnection connection)
@@ -68,13 +123,18 @@ void InsertCustomerDemo(SqlConnection connection)
     newRow["Name"] = "New Customer";
     newRow["Age"] = 28;
 
+    dataTable.Rows.Add(newRow);
 
-
-    adapter.InsertCommand = new SqlCommand("INSERT INTO Customers (Id, Name, Age) VALUES (@Id, @Name, @Age)", connection);
+    adapter.InsertCommand = new SqlCommand("INSERT INTO Customers (Id, Name, Age) VALUES (@Id, @Name, @Age)", connection)
+    {
+        CommandType = CommandType.Text
+    };
 
     adapter.InsertCommand.Parameters.Add("@Id", SqlDbType.Int, 6, "Id");
     adapter.InsertCommand.Parameters.Add("@Name", SqlDbType.NVarChar, 50, "Name");
     adapter.InsertCommand.Parameters.Add("@Age", SqlDbType.Int, 0, "Age");
+
+    adapter.Update(dataSet, "Customers");
 
     dataSet.AcceptChanges();
 }
