@@ -71,23 +71,39 @@ class CrmContext : DbContext
         // optionsBuilder.UseMySQL("YourConnectionStringHere");
         // optionsBuilder.UsePostgreql("YourConnectionStringHere");
     }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Order>()
+            .HasKey(o => o.OrderId);
+
+        modelBuilder.Entity<Order>()
+            .Property(o => o.Product)
+            .IsRequired()
+            .HasMaxLength(100);
+
+        modelBuilder.Entity<Order>()
+            .HasOne(o => o.Customer)
+            .WithMany()
+            .HasForeignKey(o => o.CustomerId);
+    }
 }
 
 public class Order
 {
-    [Key]
+    // [Key]
     public int OrderId { get; set; }
 
-    [Required]
-    [MaxLength(100)]
-    [MinLength(3)]
+    // [Required]
+    // [MaxLength(100)]
+    // [MinLength(3)]
     public string Product { get; set; }
 
-    [Required]
-    [Precision(18, 2)]
+    // [Required]
+    // [Precision(18, 2)]
     public decimal Price { get; set; }
 
-    [ForeignKey("CustomerId")]
+    // [ForeignKey("CustomerId")]
     public int CustomerId { get; set; }
     public Customer Customer { get; set; }
 }
@@ -97,4 +113,6 @@ public class Customer
     public int Id { get; set; }
     public string Name { get; set; }
     public int Age { get; set; }
+
+    public string Address { get; set;}
 }
