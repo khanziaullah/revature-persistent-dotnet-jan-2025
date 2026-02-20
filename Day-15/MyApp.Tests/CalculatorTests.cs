@@ -4,8 +4,46 @@ namespace MyApp.Tests;
 // Req -> Analysis/Design -> Development -> Testing -> Deployment
 // Req -> Analysis/Design -> Testing -> Development -> Deployment
 
-public class CalculatorTests
+// Fast
+// Isolated, and -> ????
+// Deterministic -> Idempotent
+
+// Unit Test
+
+
+// Fullstack
+// Frontend    Backend   Database            Infra
+// React        .NET       SQL           Azure/Docker/kubernetes
+
+// SOLID
+// p   t    s
+
+
+public class CalculatorTests : IDisposable
 {
+
+    // Setup
+    // [Setup]
+    // public void SetupProject()
+    // {}
+    // [TearDown]
+    // public void TearDownProject()
+    // {}
+    Calculator calculator;
+
+    public CalculatorTests()
+    {
+        calculator = new Calculator();
+    }
+
+    // Teardown
+    public void Dispose()
+    {
+        // Clean up resources if needed
+        // calculator.Dispose();
+    }
+
+
     [Theory]
     [InlineData(2, 3, 5)]     // 2 + 3 = 5
     [InlineData(0, 0, 0)]     // 0 + 0 = 0
@@ -13,14 +51,6 @@ public class CalculatorTests
     public void Add_TwoNumbers_GivesCorrectResult(int x, int y, int expectedResult)
     {
         // Arrange
-        var calculator = new Calculator();
-        // system under test
-        // var sut = new Calculator();
-
-        // manual calculation
-        // var x = 5;
-        // var y = 10;
-        // var expectedResult = 15;
 
         // Act
         var actualResult = calculator.Add(x, y);
@@ -36,7 +66,6 @@ public class CalculatorTests
     public void Subtract_TwoNumbers_GiveCorrectResult(int x, int y, int expectedResult)
     {
         // Arrange
-        var calculator = new Calculator();
         // var x = 10;
         // var y = 5;
         // var expectedResult = 5;
