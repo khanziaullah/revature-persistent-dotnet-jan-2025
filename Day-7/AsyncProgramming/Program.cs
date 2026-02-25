@@ -1,5 +1,64 @@
 ﻿using System.Diagnostics;
 
+// // Regular FLow
+// var url = "download";
+
+// var _client = new HttpClient();
+
+// Opporunitiy for optimization
+// var post = _client.GetStringAsync(url);
+
+// Console.WriteLine(post);
+
+// Gives a new thread from thread pool
+// CPU Heavy actvity
+Task<int> longAdditionTask = Task.Run(()=> LongAddition());
+
+int LongAddition()
+{
+    var sum = 0;
+    for(int i = 0; i < 500_000_000; i++)
+    {
+        sum += i;
+    }
+    return sum;
+}
+
+void PrintMessage()
+{
+    Console.WriteLine("Hello from a method!");
+}
+
+// Fire and Forget
+// Gives a new thread from thread pool
+// I/O Heavy actvity
+Task task = new Task(PrintMessage);
+
+// Task<int> taskWithResult = new Task<int>(CheckEmployeeCount);
+Task<int> taskWithResult = new Task<int>(() =>
+{
+    // SELECT COUNT(*) FROM Customers
+    // _context.Customers.Count();
+    Console.WriteLine("Hello from a method!");
+    return 42;
+});
+
+task.Start();
+
+// NEVER DO THIS
+// task.Wait();
+// var x = task.Result;
+
+var result = await taskWithResult;
+
+int CheckEmployeeCount()
+{
+    Console.WriteLine("Hello from a method!");
+    return 42;
+}
+
+
+
 try
 {
     await DemonstrateExceptions();
@@ -27,9 +86,13 @@ async Task DemonstrateExceptions()
     try
     {
         Console.WriteLine($"Count: {tasks.Count}");
-        string[] results = await Task.WaitAll(tasks.ToArray());
-        string[] results = await Task.WhenAll(tasks.ToArray());
-        Console.WriteLine($"All {results.Length} succeeded.");
+
+        // NEVER DO THIS:
+        // Task.WaitAll(tasks.ToArray());
+        await Task.WhenAll(tasks);
+        var stockValue = await Task.WhenAny(tasks);
+
+        // Console.WriteLine($"All {results.Length} succeeded.");
     }
     catch (HttpRequestException ex)
     {
@@ -115,7 +178,10 @@ async Task TaskDemoAsync()
 
         Console.Write($"[Thread {threadBefore}] Fetching {url}... ");
 
-        string content = await _client.GetStringAsync(url);
+        // ConfigureAwait(false) tells the compiler that we don't care about resuming on the original context (thread)
+        // ConfigureAwait(true) (or omitting it) tells the compiler to resume on the original context (thread)
+// [XXX - Must match] Fetching https://jsonplaceholder.typicode.com/posts/1... done. (292 chars) [XXX - Must match]
+        string content = await _client.GetStringAsync(url).ConfigureAwait(true);
 
         var threadAfter = Thread.CurrentThread.ManagedThreadId;
 
