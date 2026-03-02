@@ -4,9 +4,15 @@ using Microsoft.AspNetCore.Mvc;
 [Route("api/v1/[controller]")]
 public class CustomerController : ControllerBase
 {
+    ICustomerService customerService;
+    public CustomerController(ICustomerService customerService)
+    {
+        this.customerService = customerService;
+    }
+
     [HttpGet]
     public IActionResult Get()
     {
-        return Ok("Hello Customers");
+        return Ok(customerService.GetAllCustomers());
     }
 }
