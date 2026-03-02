@@ -1,4 +1,5 @@
 
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +18,10 @@ builder.Services.AddAutoMapper(config =>
 {
     config.AddProfile<CustomerProfile>();
 });
+
+// Fluent Validation
+builder.Services.AddScoped<IValidator<CreateCustomerDTO>, CreateCustomerDTOValidator>();
+builder.Services.AddScoped<IValidator<CreateCustomerDTO>, UKNameCreateCustomerDTOValidator>();
 
 // Add Sql Server
 builder.Services.AddDbContext<CrmDbContext>(options =>

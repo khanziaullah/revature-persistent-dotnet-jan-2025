@@ -43,12 +43,15 @@ public class CustomerDTO
 // Model for Crate Customer
 public class CreateCustomerDTO
 {
-    [Required]
-    [StringLength(100)]
-    [MinLength(2)]
-    [MaxLength(100)]
-    [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "Name can only contain letters and spaces.")]
+    // [Required]
+    // [StringLength(100)]
+    // [MinLength(2)]
+    // [MaxLength(100)]
+    // [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "Name can only contain letters and spaces.")]
     public string Name { get; set; }
+    public string Email { get; set; }
+
+    public int Age { get; set; }
 }
 
 public class CustomerProfile : Profile

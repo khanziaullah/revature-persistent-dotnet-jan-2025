@@ -1,4 +1,5 @@
 using AutoMapper;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
@@ -7,10 +8,14 @@ public class CustomerController : ControllerBase
 {
     ICustomerService customerService;
     IMapper mapper;
-    public CustomerController(ICustomerService customerService, IMapper mapper)
+
+    IValidator<CreateCustomerDTO> createCustomerDTOValidator;
+
+    public CustomerController(ICustomerService customerService, IMapper mapper, IValidator<CreateCustomerDTO> createCustomerDTOValidator)
     {
         this.customerService = customerService;
         this.mapper = mapper;
+        this.createCustomerDTOValidator = createCustomerDTOValidator;
     }
 
     [HttpGet]
@@ -36,11 +41,19 @@ public class CustomerController : ControllerBase
     [HttpPost]
     public IActionResult Post(CreateCustomerDTO createCustomerDTO)
     {
-        if(ModelState.IsValid)
+
+        var validationResult = createCustomerDTOValidator.Validate(createCustomerDTO);
+
+        if(validationResult.IsValid == false)
         {
-            // Map CreateCustomerDTO to Customer
-            return BadRequest(ModelState);
+            return BadRequest(validationResult.Errors);
         }
+
+        // if(ModelState.IsValid)
+        // {
+        //     // Map CreateCustomerDTO to Customer
+        //     return BadRequest(ModelState);
+        // }
 
         return Ok(createCustomerDTO);
     }
