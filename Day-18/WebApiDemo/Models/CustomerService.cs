@@ -1,7 +1,6 @@
-// CrmDbContext
+using AutoMapper;
 
 using Microsoft.EntityFrameworkCore;
-
 public class CrmDbContext : DbContext
 {
     public CrmDbContext(DbContextOptions<CrmDbContext> options) : base(options)
@@ -9,14 +8,12 @@ public class CrmDbContext : DbContext
     }
     public DbSet<Customer> Customers { get; set; }
 }
-
 public class Customer
 {
     public int Id { get; set; }
     public string Name { get; set; }
     public string Email { get; set; }
 }
-
 public interface ICustomerService
 {
     IEnumerable<Customer> GetAllCustomers();
@@ -33,5 +30,19 @@ public class CustomerService : ICustomerService
     public IEnumerable<Customer> GetAllCustomers()
     {
         return dbContext.Customers.ToList();
+    }
+}
+
+public class CustomerDTO
+{
+    public string FullName { get; set; }
+}
+
+public class CustomerProfile : Profile
+{
+    public CustomerProfile()
+    {
+        CreateMap<Customer, CustomerDTO>()
+            .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.Name));
     }
 }

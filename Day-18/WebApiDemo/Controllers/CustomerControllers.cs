@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
@@ -5,14 +6,30 @@ using Microsoft.AspNetCore.Mvc;
 public class CustomerController : ControllerBase
 {
     ICustomerService customerService;
-    public CustomerController(ICustomerService customerService)
+    IMapper mapper;
+    public CustomerController(ICustomerService customerService, IMapper mapper)
     {
         this.customerService = customerService;
+        this.mapper = mapper;
     }
 
     [HttpGet]
     public IActionResult Get()
     {
-        return Ok(customerService.GetAllCustomers());
+        var customers = customerService.GetAllCustomers();
+
+        // DRY -
+        // Violation of Single Responsibility
+        // Remove Manual mapping and replace with Automapper
+        // var customerDTOs = customers.Select(c => new CustomerDTO
+        // {
+        //     FullName = c.Name
+        // }).ToList();
+        // Refactoring -
+
+        // AutoMapper
+        var customerDTOs = mapper.Map<List<CustomerDTO>>(customers);
+
+        return Ok(customerDTOs);
     }
 }
