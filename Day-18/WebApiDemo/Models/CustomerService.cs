@@ -1,6 +1,8 @@
+using System.ComponentModel.DataAnnotations;
 using AutoMapper;
 
 using Microsoft.EntityFrameworkCore;
+
 public class CrmDbContext : DbContext
 {
     public CrmDbContext(DbContextOptions<CrmDbContext> options) : base(options)
@@ -36,6 +38,17 @@ public class CustomerService : ICustomerService
 public class CustomerDTO
 {
     public string FullName { get; set; }
+}
+
+// Model for Crate Customer
+public class CreateCustomerDTO
+{
+    [Required]
+    [StringLength(100)]
+    [MinLength(2)]
+    [MaxLength(100)]
+    [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "Name can only contain letters and spaces.")]
+    public string Name { get; set; }
 }
 
 public class CustomerProfile : Profile

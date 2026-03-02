@@ -32,4 +32,16 @@ public class CustomerController : ControllerBase
 
         return Ok(customerDTOs);
     }
+
+    [HttpPost]
+    public IActionResult Post(CreateCustomerDTO createCustomerDTO)
+    {
+        if(ModelState.IsValid)
+        {
+            // Map CreateCustomerDTO to Customer
+            return BadRequest(ModelState);
+        }
+
+        return Ok(createCustomerDTO);
+    }
 }
