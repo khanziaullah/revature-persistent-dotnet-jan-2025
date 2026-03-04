@@ -33,6 +33,7 @@ List<IHandler> handlers = new List<IHandler> {  email };
 
 var message = "How are you?";
 
+// chain
 foreach (var handler in handlers)
 {
     try
