@@ -12,11 +12,9 @@ public class CustomerController : ControllerBase
 
     IValidator<CreateCustomerDTO> createCustomerDTOValidator;
 
-    public CustomerController(ICustomerService customerService, IMapper mapper, IValidator<CreateCustomerDTO> createCustomerDTOValidator)
+    public CustomerController(ICustomerService customerService)
     {
         this.customerService = customerService;
-        this.mapper = mapper;
-        this.createCustomerDTOValidator = createCustomerDTOValidator;
     }
 
     [HttpGet]
@@ -24,19 +22,7 @@ public class CustomerController : ControllerBase
     {
         var customers = customerService.GetAllCustomers();
 
-        // DRY -
-        // Violation of Single Responsibility
-        // Remove Manual mapping and replace with Automapper
-        // var customerDTOs = customers.Select(c => new CustomerDTO
-        // {
-        //     FullName = c.Name
-        // }).ToList();
-        // Refactoring -
-
-        // AutoMapper
-        var customerDTOs = mapper.Map<List<CustomerDTO>>(customers);
-
-        return Ok(customerDTOs);
+        return Ok(customers);
     }
 
     [HttpGet("{id:int}")]

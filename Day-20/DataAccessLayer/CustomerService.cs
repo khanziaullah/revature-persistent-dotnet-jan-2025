@@ -33,6 +33,7 @@ public class CustomerService : ICustomerService
 
     public IEnumerable<Customer> GetAllCustomers()
     {
+        // SELECT * FROM cUSTOMERS;
         return dbContext.Customers.ToList();
     }
 
