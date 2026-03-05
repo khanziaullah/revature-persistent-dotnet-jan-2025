@@ -39,8 +39,31 @@ public class CustomerController : ControllerBase
         return Ok(customerDTOs);
     }
 
+    [HttpGet("{id:int}")]
+    public IActionResult Get([FromRoute]int id)
+    {
+        // Wrong way of filtering
+        var customers = customerService.GetAllCustomers().ToList();
+
+        // var x = customers.Where(x => x.Id == id);
+
+        // DRY -
+        // Violation of Single Responsibility
+        // Remove Manual mapping and replace with Automapper
+        // var customerDTOs = customers.Select(c => new CustomerDTO
+        // {
+        //     FullName = c.Name
+        // }).ToList();
+        // Refactoring -
+
+        // AutoMapper
+        var customerDTOs = mapper.Map<List<CustomerDTO>>(customers);
+
+        return Ok(customerDTOs);
+    }
+
     [HttpPost]
-    public IActionResult Post(CreateCustomerDTO createCustomerDTO)
+    public IActionResult Post([FromBody]CreateCustomerDTO createCustomerDTO)
     {
 
         var validationResult = createCustomerDTOValidator.Validate(createCustomerDTO);

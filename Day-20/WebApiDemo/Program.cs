@@ -20,15 +20,7 @@ builder.Services.AddDataAccessLayer();
 
 // Swagger API
 
-builder.Services.AddSwaggerGen(options =>
-{
-    options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
-    {
-        Version = "v1",
-        Title = "Customer API",
-        Description = "An ASP.NET Core Web API for managing customers"
-    });
-});
+builder.Services.AddSwaggerGen();
 
 
 // AutoMapper
@@ -46,13 +38,8 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "CRM API v1");
-        c.RoutePrefix = string.Empty;  // Swagger at root
-    });
+    app.UseSwaggerUI();
 }
-
 
 app.UseRouting();
 

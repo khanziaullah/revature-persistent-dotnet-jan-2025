@@ -35,6 +35,13 @@ public class CustomerService : ICustomerService
     {
         return dbContext.Customers.ToList();
     }
+
+    public Customer GetCustomersById(int id)
+    {
+        // Assuming there is a City property in the Customer entity
+        // SLECT * FROM Customer WHERE id = id;
+        return dbContext.Customers.Where(c => c.Id == id).FirstOrDefault();
+    }
 }
 
 public class CustomerDTO
@@ -47,7 +54,7 @@ public class CreateCustomerDTO
 {
     // [Required]
     // [StringLength(100)]
-    // [MinLength(2)]
+    [MinLength(2)]
     // [MaxLength(100)]
     // [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "Name can only contain letters and spaces.")]
     public string Name { get; set; }
