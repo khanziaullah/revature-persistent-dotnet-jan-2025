@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 public class AuthController : ControllerBase
 {
     TokenService _tokenService;
+
     public AuthController(TokenService tokenService)
     {
         _tokenService = tokenService;

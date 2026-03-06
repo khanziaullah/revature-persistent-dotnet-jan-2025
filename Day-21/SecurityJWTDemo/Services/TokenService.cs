@@ -6,15 +6,17 @@ using System.Text;
 
 public class TokenService
 {
-    // private readonly IConfiguration _configuration;
+    private readonly IConfiguration _configuration;
 
-    // public TokenService(IConfiguration configuration)
-    // {
-    //     _configuration = configuration;
-    // }
+    public TokenService(IConfiguration configuration)
+    {
+        _configuration = configuration;
+    }
 
     public string GenerateToken(string username, string role)
     {
+        var jwtSettings = _configuration.GetSection("Jwt").Get<JwtSettings>();
+
         var claims = new[]
         {
             new Claim(JwtRegisteredClaimNames.Sub, username),
@@ -23,18 +25,12 @@ public class TokenService
             new Claim("custom_claim", "custom_value")
         };
 
-        // Generate a key - Save in appconfig.json
-        // var key = RandomNumberGenerator.GetBytes(32); // 256 bits
-        // var base64Key = Convert.ToBase64String(key);
-
-
-        // hard coded 128 bit key for demo purposes, in a real application, store this securely and don't hard code it
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("uWmCk8kF2G5Y3r0yP8dBv5rXjA1q9SxH6eZtL4QnM7U="));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
-            issuer: "revature",
-            audience: "dotnet-batch-2026",
+            issuer: jwtSettings.Issuer,
+            audience: jwtSettings.Audience,
             claims: claims,
             expires: DateTime.Now.AddMinutes(30),
             signingCredentials: creds);

@@ -4,13 +4,19 @@ using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+// Read JWT settings using options
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
+
+var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddControllers();
 
 // JWT Authentication
-
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -23,10 +29,11 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuer = true,
         ValidateAudience = true,
         ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        ValidIssuer = "revature",
-        ValidAudience = "dotnet-batch-2026",
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("uWmCk8kF2G5Y3r0yP8dBv5rXjA1q9SxH6eZtL4QnM7U"))
+        // DONT DO THIS
+        ValidateIssuerSigningKey = false,
+        ValidIssuer = jwtSettings.Issuer,
+        ValidAudience = jwtSettings.Audience,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key))
     };
 });
 
@@ -52,3 +59,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+
+public record JwtSettings(string Key, string Issuer, string Audience);
