@@ -1,11 +1,9 @@
 @WebApiDemo_HostAddress = http://localhost:5000
 
 ### Post requets for Create Customer DTO
-POST {{WebApiDemo_HostAddress}}/api/v1/customer
+GET {{WebApiDemo_HostAddress}}/api/v1/cx
 Content-Type: application/json
 
-{
-    "name": "123"
-}
 
 ###
+for /l %i in (1,1,50) do curl https://localhost:5000/api/v1/cx -H "Content-Type: application/json" 
