@@ -16,12 +16,13 @@ public class TokenService
     public string GenerateToken(string username, string role)
     {
         var jwtSettings = _configuration.GetSection("Jwt").Get<JwtSettings>();
-
+        // Db Lookoup
         var claims = new[]
         {
             new Claim(JwtRegisteredClaimNames.Sub, username),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim(ClaimTypes.Role, role),
+            new Claim("DateOfBirth", "01/01/2025"),
             new Claim("custom_claim", "custom_value")
         };
 

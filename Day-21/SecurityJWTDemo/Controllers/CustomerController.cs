@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("/api/v1/[controller]")]
-[Authorize]
+[Authorize(Roles = "Admin, Customer Management", Policy = "AgePolicy")]
 public class CustomerController : ControllerBase
 {
     [HttpGet()]
