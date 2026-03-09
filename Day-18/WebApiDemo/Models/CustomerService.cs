@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using AutoMapper;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 public class CrmDbContext : DbContext
 {
@@ -24,9 +25,13 @@ public class CustomerService : ICustomerService
 {
     private readonly CrmDbContext dbContext;
 
-    public CustomerService(CrmDbContext dbContext)
+    private readonly IMemoryCache _cache;
+
+
+    public CustomerService(CrmDbContext dbContext, IMemoryCache cache)
     {
         this.dbContext = dbContext;
+        _cache = cache;
     }
 
     public IEnumerable<Customer> GetAllCustomers()

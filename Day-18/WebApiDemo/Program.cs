@@ -30,6 +30,8 @@ builder.Services.AddDbContextPool<CrmDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("CrmDbConnection"))
     , poolSize: 128);
 
+builder.Services.AddMemoryCache();
+
 var app = builder.Build();
 
 app.UseRouting();
