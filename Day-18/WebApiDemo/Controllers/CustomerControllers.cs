@@ -1,19 +1,24 @@
 using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 
 [ApiController]
 [Route("api/v1/[controller]")]
 public class CustomerController : ControllerBase
 {
-    IMemoryCache _cache;
+    // In memory caching
+    // IMemoryCache _cache;
+
+    // Redis Caching
+    IDistributedCache _cache;
     ICustomerService customerService;
     IMapper mapper;
 
     IValidator<CreateCustomerDTO> createCustomerDTOValidator;
 
-    public CustomerController(ICustomerService customerService, IMapper mapper, IValidator<CreateCustomerDTO> createCustomerDTOValidator, IMemoryCache cache)
+    public CustomerController(ICustomerService customerService, IMapper mapper, IValidator<CreateCustomerDTO> createCustomerDTOValidator, IDistributedCache cache)
     {
         this.customerService = customerService;
         this.mapper = mapper;
@@ -44,14 +49,14 @@ public class CustomerController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetCustomerById(int id)
     {
-        // Caching
-        var cacheKey = $"{id}";
-        if (_cache.TryGetValue(cacheKey, out CustomerDTO customerDTO))
+        // Try to get the customer from cache
+        var cachedCustomer = await _cache.GetStringAsync($"customer_{id}");
+        if (cachedCustomer != null)
         {
-            return Ok(customerDTO);
+            return Ok(cachedCustomer);
         }
 
-        await Task.Delay(5000); // Simulate a long-running operation
+        await Task.Delay(5000); // Simulate a delay for database access
 
         var customer = customerService.GetAllCustomers().FirstOrDefault(c => c.Id == id);
         if (customer == null)
@@ -59,16 +64,13 @@ public class CustomerController : ControllerBase
             return NotFound();
         }
 
-        customerDTO = mapper.Map<CustomerDTO>(customer);
+        // Cache the customer data for future requests
+        await _cache.SetStringAsync($"customer_{id}", customer.Name, new DistributedCacheEntryOptions
+        {
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
+        });
 
-        // Set cache options
-        var cacheEntryOptions = new MemoryCacheEntryOptions()
-            .SetSlidingExpiration(TimeSpan.FromMinutes(5));
-
-        // Save data in cache
-        _cache.Set(cacheKey, customerDTO, cacheEntryOptions);
-
-        return Ok(customerDTO);
+        return Ok(customer);
     }
 
 

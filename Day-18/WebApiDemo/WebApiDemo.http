@@ -10,3 +10,5 @@ for /l %i in (1,1,50) do curl https://localhost:5000/api/v1/cx -H "Content-Type:
 
 
 ab -n 1000 -c 50 http://localhost:5000/api/v1/cx
+
+

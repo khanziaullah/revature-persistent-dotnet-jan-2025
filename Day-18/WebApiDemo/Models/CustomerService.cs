@@ -25,13 +25,9 @@ public class CustomerService : ICustomerService
 {
     private readonly CrmDbContext dbContext;
 
-    private readonly IMemoryCache _cache;
-
-
-    public CustomerService(CrmDbContext dbContext, IMemoryCache cache)
+    public CustomerService(CrmDbContext dbContext)
     {
         this.dbContext = dbContext;
-        _cache = cache;
     }
 
     public IEnumerable<Customer> GetAllCustomers()

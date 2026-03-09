@@ -30,7 +30,12 @@ builder.Services.AddDbContextPool<CrmDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("CrmDbConnection"))
     , poolSize: 128);
 
-builder.Services.AddMemoryCache();
+// builder.Services.AddMemoryCache();
+
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = "localhost:6379";
+});
 
 var app = builder.Build();
 
