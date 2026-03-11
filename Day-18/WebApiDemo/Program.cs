@@ -39,8 +39,24 @@ builder.Services.AddStackExchangeRedisCache(options =>
 
 var app = builder.Build();
 
+app.Use(async (context, next) =>
+{
+
+    // Get the full request URL
+    var request = context.Request;
+    var requestUrl = $"{request.Scheme}://{request.Host}{request.Path}{request.QueryString}";
+
+    // Add it to response header
+    context.Response.Headers["Request-Url"] = requestUrl;
+
+        // Execute the rest of the pipeline first
+    await next();
+
+});
+
 app.UseRouting();
 
 app.MapControllers();
+
 
 app.Run();

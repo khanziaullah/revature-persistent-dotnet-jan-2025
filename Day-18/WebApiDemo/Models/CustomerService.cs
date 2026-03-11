@@ -38,6 +38,7 @@ public class CustomerService : ICustomerService
 
 public class CustomerDTO
 {
+    public string RequestUrl { get; set; }
     public string FullName { get; set; }
 }
 
