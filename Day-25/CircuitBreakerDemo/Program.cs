@@ -10,9 +10,31 @@ int failureCount = 0;
 
 // CircuitBreakerDemo();
 
+// Create a time out policy
+
+var _timeoutPolicy = Policy
+    .TimeoutAsync<HttpResponseMessage>(TimeSpan.FromSeconds(3), (context, timeSpan, task) =>
+    {
+        Console.WriteLine($"Request timed out after {timeSpan.TotalSeconds} seconds");
+        return Task.CompletedTask;
+    });
+
+await _timeoutPolicy.ExecuteAsync(async () =>
+    {
+        Console.WriteLine("Attemping to call external service...");
+        Console.WriteLine($"Time: {DateTime.Now}");
+        var response = await client.GetAsync("http://localhost:5000/customer");
+        response.EnsureSuccessStatusCode();
+        var result = await response.Content.ReadAsStringAsync();
+        Console.WriteLine($"Result: {result}");
+        await Task.FromResult(0);
+    });
+
+
 var _retryPolicy = Policy
     .Handle<HttpRequestException>()
     .WaitAndRetryAsync(3, attempt => TimeSpan.FromSeconds(Math.Pow(2, attempt))); // Exponential backoff
+
 
 await _retryPolicy.ExecuteAsync(async () =>
         {
@@ -20,10 +42,11 @@ await _retryPolicy.ExecuteAsync(async () =>
             Console.WriteLine($"Time: {DateTime.Now}");
             var response = await client.GetAsync("http://localhost:5000/customer");
             response.EnsureSuccessStatusCode();
-            var result =await response.Content.ReadAsStringAsync();
+            var result = await response.Content.ReadAsStringAsync();
             Console.WriteLine($"Result: {result}");
             await Task.FromResult(0);
         });
+
 
 Console.ReadKey();
 
