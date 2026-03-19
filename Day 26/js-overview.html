@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript Overview</title>
+    <style>
+      body {
+        font-family: Georgia, serif;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 2rem;
+        background: #fdfcf9;
+        color: #1a1a1a;
+        line-height: 1.7;
+      }
+      h1 {
+        font-size: 2.2rem;
+        border-bottom: 4px solid #1a1a1a;
+        padding-bottom: 0.5rem;
+        margin-bottom: 2rem;
+      }
+      h2 {
+        font-size: 1.4rem;
+        margin-top: 3rem;
+        padding: 0.4rem 0.8rem;
+        background: #1a1a1a;
+        color: #fdfcf9;
+        display: inline-block;
+      }
+      p.definition {
+        font-style: italic;
+        color: #444;
+        border-left: 3px solid #ccc;
+        padding-left: 1rem;
+        margin: 0.8rem 0 1.2rem;
+      }
+      .demo-box {
+        border: 2px dashed #aaa;
+        padding: 1.2rem;
+        margin: 1rem 0;
+        background: #fff;
+      }
+      .output {
+        background: #1e1e1e;
+        color: #d4d4d4;
+        font-family: 'Courier New', monospace;
+        font-size: 0.88rem;
+        padding: 1rem;
+        border-radius: 6px;
+        margin-top: 0.6rem;
+        line-height: 1.7;
+        white-space: pre-wrap;
+      }
+      .output .label {
+        color: #9cdcfe;
+        display: block;
+        border-bottom: 1px solid #333;
+        margin-bottom: 0.4rem;
+        padding-bottom: 0.3rem;
+        font-size: 0.8rem;
+      }
+      .output .result { color: #ce9178; }
+      .output .comment { color: #6a9955; }
+      .output .keyword { color: #569cd6; }
+      nav {
+        background: #1a1a1a;
+        padding: 0.8rem 1rem;
+        margin-bottom: 2rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      nav a {
+        color: #fff;
+        text-decoration: none;
+        font-size: 0.78rem;
+        font-family: monospace;
+        padding: 0.2rem 0.5rem;
+        border-radius: 3px;
+      }
+      nav a:hover { background: rgba(255,255,255,0.2); }
+      table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; font-size: 0.9rem; }
+      th, td { border: 1px solid #ccc; padding: 0.4rem 0.8rem; text-align: left; }
+      th { background: #f0f0f0; }
+    </style>
+    <script src="js-overview.js" defer></script>
+  </head>
+  <body>
+
+    <h1>JavaScript Overview</h1>
+
+    <nav>
+      <a href="#js-overview">Overview</a>
+      <a href="#data-types">Data Types</a>
+      <a href="#variables">Variables</a>
+      <a href="#coercion">Coercion</a>
+      <a href="#strict">Strict Mode</a>
+      <a href="#arithmetic">Arithmetic</a>
+      <a href="#comparison">Comparison</a>
+      <a href="#assignment">Assignment</a>
+      <a href="#control">Control Flow</a>
+      <a href="#arrays">Arrays</a>
+      <a href="#functions">Functions</a>
+      <a href="#arrow">Arrow Functions</a>
+      <a href="#defaults">Default Params</a>
+      <a href="#objects">Object Literals</a>
+      <a href="#template">Template Literals</a>
+      <a href="#naming">Naming Conventions</a>
+    </nav>
+
+    <!-- JavaScript Overview -->
+    <section id="js-overview">
+      <h2>JavaScript Overview</h2>
+      <p class="definition">JavaScript is the programming language of the web. It runs in the browser and makes HTML documents interactive — responding to user actions, updating the page dynamically, and communicating with servers without reloading.</p>
+      <div class="demo-box">
+        <div id="out-overview" class="output"><span class="label">// Output</span></div>
+      </div>
+    </section>
+
+    <!-- Data Types (Primitives and Objects) -->
+    <section id="data-types">
+      <h2>Data Types (Primitives and Objects)</h2>
+      <p class="definition">JavaScript has two categories of data types. Primitives are simple, immutable values — strings, numbers, booleans, null, undefined, and symbols. Objects are collections of key-value pairs, including arrays and functions.</p>
+      <div class="demo-box">
+        <div id="out-datatypes" class="output"><span class="label">// Output</span></div>
+      </div>
+    </section>
+
+    <!-- Variables (var, let, const) -->
+    <section id="variables">
+      <h2>Variables (var, let, const)</h2>
+      <p class="definition">Variables are named containers for storing values. JavaScript has three ways to declare them — var (old, function-scoped), let (block-scoped, reassignable), and const (block-scoped, cannot be reassigned).</p>
+      <div class="demo-box">
+        <div id="out-variables" class="output"><span class="label">// Output</span></div>
+      </div>
+    </section>
+
+    <!-- Type Coercion -->
+    <section id="coercion">
+      <h2>Type Coercion</h2>
+      <p class="definition">Type coercion is JavaScript's automatic conversion of one data type to another during an operation. It can produce surprising results — understanding it helps you avoid bugs and explains why === is preferred over ==.</p>
+      <div class="demo-box">
+        <div id="out-coercion" class="output"><span class="label">// Output</span></div>
+      </div>
+    </section>
+
+    <!-- Strict Mode -->
+    <section id="strict">
+      <h2>Strict Mode</h2>
+      <p class="definition">Strict mode is an opt-in mode that catches common mistakes and disables certain unsafe JavaScript features. You enable it by writing "use strict" at the top of a file or function. Modern ES modules use it by default.</p>
+      <div class="demo-box">
+        <div id="out-strict" class="output"><span class="label">// Output</span></div>
+      </div>
+    </section>
+
+    <!-- Arithmetic Operators -->
+    <section id="arithmetic">
+      <h2>Arithmetic Operators</h2>
+      <p class="definition">Arithmetic operators perform mathematical calculations. JavaScript supports the standard operators plus modulo (remainder), exponentiation, and increment/decrement shortcuts.</p>
+      <div class="demo-box">
+        <div id="out-arithmetic" class="output"><span class="label">// Output</span></div>
+      </div>
+    </section>
+
+    <!-- Comparison and Logical Operators -->
+    <section id="comparison">
+      <h2>Comparison and Logical Operators</h2>
+      <p class="definition">Comparison operators compare two values and return true or false. Logical operators combine multiple conditions. The key rule: always use === (strict equality) instead of == to avoid type coercion surprises.</p>
+      <div class="demo-box">
+        <div id="out-comparison" class="output"><span class="label">// Output</span></div>
+      </div>
+    </section>
+
+    <!-- Assignment Operators -->
+    <section id="assignment">
+      <h2>Assignment Operators</h2>
+      <p class="definition">Assignment operators assign a value to a variable. Shorthand operators combine an arithmetic operation with assignment — making code more concise without changing behavior.</p>
+      <div class="demo-box">
+        <div id="out-assignment" class="output"><span class="label">// Output</span></div>
+      </div>
+    </section>
+
+    <!-- Control Flow (if/else, switch, loops) -->
+    <section id="control">
+      <h2>Control Flow (if/else, switch, loops)</h2>
+      <p class="definition">Control flow determines the order in which code executes. Conditional statements (if/else, switch) make decisions. Loops (for, while, for...of) repeat code until a condition is met.</p>
+      <div class="demo-box">
+        <div id="out-control" class="output"><span class="label">// Output</span></div>
+      </div>
+    </section>
+
+    <!-- Array and Array Methods -->
+    <section id="arrays">
+      <h2>Array and Array Methods</h2>
+      <p class="definition">An array is an ordered list of values. JavaScript arrays come with powerful built-in methods — push/pop for adding/removing, map for transforming, filter for selecting, and reduce for aggregating.</p>
+      <div class="demo-box">
+        <div id="out-arrays" class="output"><span class="label">// Output</span></div>
+      </div>
+    </section>
+
+    <!-- Functions -->
+    <section id="functions">
+      <h2>Functions — Declaration and Expression</h2>
+      <p class="definition">A function is a reusable block of code. Function declarations are hoisted — they can be called before they appear in the file. Function expressions assign a function to a variable and are not hoisted.</p>
+      <div class="demo-box">
+        <div id="out-functions" class="output"><span class="label">// Output</span></div>
+      </div>
+    </section>
+
+    <!-- Arrow Functions -->
+    <section id="arrow">
+      <h2>Arrow Functions</h2>
+      <p class="definition">Arrow functions are a shorter syntax for writing functions introduced in ES6. They are especially useful for callbacks and array methods. They also handle the "this" keyword differently from regular functions.</p>
+      <div class="demo-box">
+        <div id="out-arrow" class="output"><span class="label">// Output</span></div>
+      </div>
+    </section>
+
+    <!-- Default Parameters -->
+    <section id="defaults">
+      <h2>Default Parameters</h2>
+      <p class="definition">Default parameters let you define fallback values for function arguments. If a caller does not pass a value for that argument, the default is used instead of undefined.</p>
+      <div class="demo-box">
+        <div id="out-defaults" class="output"><span class="label">// Output</span></div>
+      </div>
+    </section>
+
+    <!-- Object Literals -->
+    <section id="objects">
+      <h2>Object Literals</h2>
+      <p class="definition">An object literal is a collection of key-value pairs wrapped in curly braces. Objects represent real-world entities — a user, a product, a config. Values can be primitives, arrays, or other objects.</p>
+      <div class="demo-box">
+        <div id="out-objects" class="output"><span class="label">// Output</span></div>
+      </div>
+    </section>
+
+    <!-- Template Literals -->
+    <section id="template">
+      <h2>Template Literals</h2>
+      <p class="definition">Template literals are strings wrapped in backticks instead of quotes. They support multi-line strings and embedded expressions using ${} — making string building far cleaner than concatenation with +.</p>
+      <div class="demo-box">
+        <div id="out-template" class="output"><span class="label">// Output</span></div>
+      </div>
+    </section>
+
+    <!-- Naming Conventions -->
+    <section id="naming">
+      <h2>Naming Conventions</h2>
+      <p class="definition">Naming conventions are agreed-upon patterns for naming variables, functions, and other identifiers. Following them makes code readable and predictable — for yourself and for teammates.</p>
+      <div class="demo-box">
+        <div id="out-naming" class="output"><span class="label">// Output</span></div>
+        <table style="margin-top:1rem;">
+          <tr><th>Convention</th><th>Used For</th><th>Example</th></tr>
+          <tr><td>camelCase</td><td>Variables, functions</td><td>getUserName, totalPrice</td></tr>
+          <tr><td>PascalCase</td><td>Classes, constructerea</td><td>UserProfile, ShoppingCart</td></tr>
+          <tr><td>UPPER_SNAKE_CASE</td><td>Constants</td><td>MAX_RETRIES, API_URL</td></tr>
+          <tr><td>_prefix</td><td>Private (by convention)</td><td>_internalValue</td></tr>
+          <tr><td>kebab-case</td><td>CSS classes, file names</td><td>user-profile.css</td></tr>
+        </table>
+      </div>
+    </section>
+
+  </body>
+</html>
