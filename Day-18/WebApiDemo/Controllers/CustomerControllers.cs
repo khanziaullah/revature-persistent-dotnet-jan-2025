@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
@@ -6,6 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 
+/// <summary>
+/// API endpoitn to create customers
+/// </summary>
 [ApiController]
 [Route("api/v1/[controller]")]
 public class CustomerController : ControllerBase
@@ -28,6 +32,12 @@ public class CustomerController : ControllerBase
         this._cache = cache;
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <returns> 200 -
+    /// List of Customers.
+    /// </returns>
     [HttpGet]
     public IActionResult Get()
     {
@@ -55,6 +65,7 @@ public class CustomerController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetCustomerById(int id)
     {
+        if(ModelState.IsValid) throw new NOt("Invalid model");
         // Try to get the customer from cache
         // var cachedCustomer = await _cache.GetStringAsync($"customer_{id}");
         // if (cachedCustomer != null)
@@ -105,4 +116,73 @@ public class CustomerController : ControllerBase
 
         return Ok(createCustomerDTO);
     }
+}
+
+
+// DB - Domain Entity
+class Custmer
+{
+    public int Id;
+
+    public string name;
+
+    pulic string lastname;
+    public int age;
+
+
+    public bool IsDeleted;
+
+    // Audit Before
+    public string CreatedBy;
+    public DateTime CreateDate;
+    public string UpdatedBy;
+    public DateTime UpdateDate;
+    public string DeletedBy;
+    public DateTime DeleteDate;
+}
+
+public record CreateCustomerDTO([MinLength(3)]string fullname, int age);
+
+public record CreateCustomerCommand(string name, int age) : IRequest<CreateCustomerResponseDTO>;
+
+// AutoMapper
+
+dotnet add package AutoMapper;
+
+// DRY - Do not repeat
+CustomerProfile<Customer, CreateCustomerDTO> : Profile
+{
+    CustomerProfile()
+    {
+        Map<Custoemr, CtusomerDTO>.Source().Destination();
+    }
+}
+
+
+IMapper;
+
+mapper.Map<custoemr, customerdto>;
+
+
+FLuentValidation;
+
+
+IndianAddressValidations : AbstractValidator
+{
+    ctor()
+    {
+        RuleSet(zip).Lenght(6).IsNull().IsEmpty().MEsage("Vlidation message")");
+        RuleSet(age).MinLenght(3).IsNull().IsEmpty().MEsage("Vlidation message")");
+    }
+
+}
+
+AmericanAddValidations : AbstractValidator
+{
+    ctor()
+    {
+        RuleSet(zip).MinLenght(3).IsNull().IsEmpty().MEsage("5-4")");
+        RuleSet(age).MinLenght(3).IsNull().IsEmpty().MEsage("Vlidation message")");
+    }
+
 }

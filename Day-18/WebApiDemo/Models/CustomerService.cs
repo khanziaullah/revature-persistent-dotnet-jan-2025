@@ -18,8 +18,11 @@ public class Customer
     public string Email { get; set; }
 }
 public interface ICustomerService
+// Light class
 {
+    // On Command
     IEnumerable<Customer> GetAllCustomers();
+    // Off Command
 }
 public class CustomerService : ICustomerService
 {

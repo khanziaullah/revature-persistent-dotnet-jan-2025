@@ -6,8 +6,10 @@ using Microsoft.IdentityModel.Tokens;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+builder.Configuration.AddEnvironment();
 
-// Read JWT settings using options
+
+// Read JWT settings using options pattern
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 
 var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>();

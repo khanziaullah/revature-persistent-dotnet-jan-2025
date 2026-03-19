@@ -12,3 +12,28 @@ for /l %i in (1,1,50) do curl https://localhost:5000/api/v1/cx -H "Content-Type:
 ab -n 1000 -c 50 http://localhost:5000/api/v1/cx
 
 
+[FromRoute]
+GET /api/v1/customer/city/pune HTTP/1.1
+HOST: localhost:5000
+
+
+[FromHeader]
+Authentication-Header: Bearer header.payload.signature
+Accept-Content: application/xml
+{}
+
+[FromQuery]
+GET /api/v1/customer?city=pune HTTP/1.1
+HOST: localhost:5000
+Authentication-Header: Bearer header.payload.signature
+Accept-Content: application/xml
+{}
+
+POST /api/v1/customer HTTP/1.1
+HOST: localhost:5000
+
+[FromBody]
+{
+    iD: 10
+    Name: Zia
+}

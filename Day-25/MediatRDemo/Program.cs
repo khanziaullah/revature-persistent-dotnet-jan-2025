@@ -51,5 +51,6 @@ public class RemoteControl
     public void PressButton()
     {
         _mediator.Send(new LightOnCommand() { Light = new Light() });
+        // _mediator.Publish();
     }
 }
