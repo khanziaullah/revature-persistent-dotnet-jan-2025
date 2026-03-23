@@ -1,9 +1,5 @@
-// Module 01 — Starter
-// Your job: import and render CustomerCard and CustomerList below.
-// Work through the README step by step.
 
 import CustomerList from "./CustomerList"
-
 
 const customers = [
   { id: 1, name: 'Jane Doe', email: 'jane.doe@acme.com', company: 'Acme Corp', isActive: true },
@@ -22,9 +18,7 @@ function App() {
         <h1>Customers</h1>
       </header>
       <main className="app-main">
-        <CustomerList list={customers} />
-        {/* Step 1: Render a single <CustomerCard /> here with hardcoded props */}
-        {/* Step 2: Replace with <CustomerList customers={customers} /> */}
+        <CustomerList customers={customers} />
       </main>
     </div>
   )

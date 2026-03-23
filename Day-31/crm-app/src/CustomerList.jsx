@@ -1,12 +1,12 @@
 import React from 'react'
 import CustomerCard from './CustomerCard'
 
-const CustomerList = ({ list }) => {
+const CustomerList = ({ customers }) => {
   return (
     <>
-      <div>Customer Count : {list.length}</div>
+      <div>Customer Count : {customers.length}</div>
       {
-        list.map((customer) => (
+        customers.map((customer) => (
           <CustomerCard {...customer} />
         ))
       }
