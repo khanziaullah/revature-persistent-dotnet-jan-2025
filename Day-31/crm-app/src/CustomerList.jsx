@@ -1,16 +1,18 @@
-import React from 'react'
 import CustomerCard from './CustomerCard'
 
 const CustomerList = ({ customers }) => {
   return (
-    <>
-      <div>Customer Count : {customers.length}</div>
-      {
-        customers.map((customer) => (
-          <CustomerCard {...customer} />
-        ))
-      }
-    </>
+    <div className="customer-list">
+      {customers.map((customer) => (
+        <CustomerCard
+          key={customer.id}
+          name={customer.name}
+          email={customer.email}
+          company={customer.company}
+          isActive={customer.isActive}
+        />
+      ))}
+    </div>
   )
 }
 
