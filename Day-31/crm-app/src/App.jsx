@@ -1,5 +1,7 @@
 
+import { useState } from "react";
 import CustomerList from "./CustomerList"
+import SearchBar from "./SearchBar";
 
 const customers = [
   { id: 1, name: 'Jane Doe', email: 'jane.doe@acme.com', company: 'Acme Corp', isActive: true },
@@ -12,13 +14,19 @@ const customers = [
 
 
 function App() {
+
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const filteredCustomers = customers.filter((customer) => customer.name.toLowerCase().includes(searchTerm.toLowerCase()))
+
   return (
     <div className="app">
       <header className="app-header">
         <h1>Customers</h1>
       </header>
       <main className="app-main">
-        <CustomerList customers={customers} />
+        <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
+        <CustomerList customers={filteredCustomers} />
       </main>
     </div>
   )
