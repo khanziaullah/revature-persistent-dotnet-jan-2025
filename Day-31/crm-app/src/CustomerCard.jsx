@@ -1,12 +1,23 @@
-import React from 'react'
+const CustomerCard = ({ name, email, company, isActive }) => {
+    const initials = name
+        .split(' ')
+        .map((part) => part[0])
+        .join('')
+        .toUpperCase()
 
-const CustomerCard = ({ id, name, email, company, isActive }) => {
     return (
-        <div>
-            <h2>{name}</h2>
-            <p>{email}</p>
-            <p>{company}</p>
-            <p>{isActive ? 'Active' : 'Inactive'}</p>
+        <div className="customer-card">
+            <div className="customer-avatar">{initials}</div>
+
+            <div className="customer-info">
+                <h3 className="customer-name">{name}</h3>
+                <p className="customer-email">{email}</p>
+                <p className="customer-company">{company}</p>
+            </div>
+
+            <span className={`badge ${isActive ? 'badge-active' : 'badge-inactive'}`}>
+                {isActive ? 'Active' : 'Inactive'}
+            </span>
         </div>
     )
 }
