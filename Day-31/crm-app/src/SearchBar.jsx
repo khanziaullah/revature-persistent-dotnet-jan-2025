@@ -1,6 +1,7 @@
 import React from 'react'
 
-const SearchBar = ({ searchTerm, onSearchChange }) => {
+// const SearchBar = (prop) => {
+const SearchBar = ({ onSearchChange }) => {
 
     const onSearchClear = () => {
         onSearchChange('');
