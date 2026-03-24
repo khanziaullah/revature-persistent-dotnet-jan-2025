@@ -1,9 +1,7 @@
 import CustomerCard from './CustomerCard'
 
-const CustomerList = ({ customers, onToggleActive }) => {
-  if (customers.length === 0) {
-    return <p className="empty-state">No customers match your search.</p>
-  }
+const CustomerList = ({ customers, onToggleActive, onDelete }) => {
+  if (customers.length === 0) return <p className="empty-state">No customers match your search.</p>
 
   return (
     <div className="customer-list">
@@ -15,7 +13,8 @@ const CustomerList = ({ customers, onToggleActive }) => {
           email={customer.email}
           company={customer.company}
           isActive={customer.isActive}
-          onToggleActive={onToggleActive}
+          onToggleActive={() => onToggleActive(customer.id, customer.isActive)}
+          onDelete={() => onDelete(customer.id)}
         />
       ))}
     </div>
