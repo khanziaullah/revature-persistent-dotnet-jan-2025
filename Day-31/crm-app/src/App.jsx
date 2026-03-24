@@ -1,7 +1,10 @@
 import { useState } from 'react'
-import CustomerList from './components/CustomerList'
-import SearchBar from './components/SearchBar'
-import CustomerForm from './components/forms/CustomerForm'
+import { Routes, Route, Navigate } from 'react-router-dom'
+import Navbar from './components/Navbar'
+import CustomersPage from './pages/CustomersPage'
+import CustomerDetailPage from './pages/CustomerDetailPage'
+import AddCustomerPage from './pages/AddCustomerPage'
+import EditCustomerPage from './pages/EditCustomerPage'
 import './index.css'
 
 function App() {
@@ -13,18 +16,6 @@ function App() {
     { id: 5, name: 'Anna Bell', email: 'anna@hooli.com', company: 'Hooli', phone: '415-555-0105', isActive: true },
   ])
 
-  const [searchTerm, setSearchTerm] = useState('')
-  const [selectedId, setSelectedId] = useState(null)
-
-  // null = list view | 'add' = add form | customer object = edit form
-  const [formMode, setFormMode] = useState(null)
-
-  const filteredCustomers = customers.filter(
-    (c) =>
-      c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      c.company.toLowerCase().includes(searchTerm.toLowerCase())
-  )
-
   const handleToggleActive = (id) => {
     setCustomers(customers.map((c) =>
       c.id === id ? { ...c, isActive: !c.isActive } : c
@@ -32,64 +23,40 @@ function App() {
   }
 
   const handleAddCustomer = (formData) => {
-    const newCustomer = {
-      ...formData,
-      id: Date.now(),
-      isActive: true,
-    }
-    setCustomers([...customers, newCustomer])
-    setFormMode(null)
+    setCustomers([...customers, { ...formData, id: Date.now(), isActive: true }])
   }
 
-  const handleUpdateCustomer = (formData) => {
-    setCustomers(customers.map((c) =>
-      c.id === formMode.id ? { ...c, ...formData } : c
-    ))
-    setFormMode(null)
+  const handleUpdateCustomer = (id, formData) => {
+    setCustomers(customers.map((c) => c.id === id ? { ...c, ...formData } : c))
   }
 
-  const isFormOpen = formMode !== null
+  const handleDeleteCustomer = (id) => {
+    setCustomers(customers.filter((c) => c.id !== id))
+  }
 
   return (
     <div className="app">
-      <header className="app-header">
-        <div className="app-header-content">
-          <div>
-            <h1>Customers</h1>
-            <p className="app-subtitle">
-              {filteredCustomers.length} of {customers.length} customers
-            </p>
-          </div>
-          {!isFormOpen && (
-            <button
-              className="btn-primary"
-              onClick={() => setFormMode('add')}
-            >
-              + Add Customer
-            </button>
-          )}
-        </div>
-      </header>
-
+      <Navbar />
       <main className="app-main">
-        {isFormOpen ? (
-          <CustomerForm
-            initialData={formMode === 'add' ? null : formMode}
-            onSubmit={formMode === 'add' ? handleAddCustomer : handleUpdateCustomer}
-            onCancel={() => setFormMode(null)}
-          />
-        ) : (
-          <>
-            <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
-            <CustomerList
-              customers={filteredCustomers}
-              selectedId={selectedId}
-              onSelectCustomer={setSelectedId}
+        <Routes>
+          <Route path="/" element={<Navigate to="/customers" replace />} />
+          <Route path="/customers" element={
+            <CustomersPage customers={customers} onToggleActive={handleToggleActive} />
+          } />
+          <Route path="/customers/new" element={
+            <AddCustomerPage onAddCustomer={handleAddCustomer} />
+          } />
+          <Route path="/customers/:id" element={
+            <CustomerDetailPage
+              customers={customers}
               onToggleActive={handleToggleActive}
-              onEditCustomer={(customer) => setFormMode(customer)}
+              onDeleteCustomer={handleDeleteCustomer}
             />
-          </>
-        )}
+          } />
+          <Route path="/customers/:id/edit" element={
+            <EditCustomerPage customers={customers} onUpdateCustomer={handleUpdateCustomer} />
+          } />
+        </Routes>
       </main>
     </div>
   )

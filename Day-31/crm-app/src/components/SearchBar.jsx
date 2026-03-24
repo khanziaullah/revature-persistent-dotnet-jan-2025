@@ -1,4 +1,3 @@
-// SearchBar.jsx — unchanged from Module 02
 const SearchBar = ({ searchTerm, onSearchChange }) => {
   return (
     <div className="search-bar">
@@ -11,11 +10,7 @@ const SearchBar = ({ searchTerm, onSearchChange }) => {
         onChange={(e) => onSearchChange(e.target.value)}
       />
       {searchTerm && (
-        <button
-          className="search-clear"
-          onClick={() => onSearchChange('')}
-          aria-label="Clear search"
-        >
+        <button className="search-clear" onClick={() => onSearchChange('')} aria-label="Clear search">
           ✕
         </button>
       )}
