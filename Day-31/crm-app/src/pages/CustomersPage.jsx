@@ -4,12 +4,13 @@ import CustomerList from '../components/CustomerList'
 import SearchBar from '../components/SearchBar'
 import LoadingSpinner from '../components/LoadingSpinner'
 import ErrorMessage from '../components/ErrorMessage'
-import useCustomers from '../hooks/useCustomers'
-import { updateCustomer, deleteCustomer } from '../api/customersApi'
+import { useCustomerContext } from '../context/CustomerContext'
+import { useNotification } from '../context/NotificationContext'
 
 const CustomersPage = () => {
   const [searchTerm, setSearchTerm] = useState('')
-  const { customers, loading, error, refetch } = useCustomers()
+  const { customers, loading, error, toggleActive, removeCustomer, refetch } = useCustomerContext()
+  const { notify } = useNotification()
 
   const filteredCustomers = customers.filter(
     (c) =>
@@ -19,20 +20,20 @@ const CustomersPage = () => {
 
   const handleToggleActive = async (id, currentStatus) => {
     try {
-      await updateCustomer(id, { isActive: !currentStatus })
-      refetch()
-    } catch (err) {
-      console.error('Failed to toggle status:', err)
+      await toggleActive(id, currentStatus)
+      notify('Customer status updated.')
+    } catch {
+      notify('Failed to update status.', 'error')
     }
   }
 
-  const handleDelete = async (id) => {
-    if (!window.confirm('Delete this customer? This cannot be undone.')) return
+  const handleDelete = async (id, name) => {
+    if (!window.confirm(`Delete ${name}? This cannot be undone.`)) return
     try {
-      await deleteCustomer(id)
-      refetch()
-    } catch (err) {
-      console.error('Failed to delete customer:', err)
+      await removeCustomer(id)
+      notify('Customer deleted.')
+    } catch {
+      notify('Failed to delete customer.', 'error')
     }
   }
 

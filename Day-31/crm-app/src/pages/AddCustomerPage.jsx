@@ -1,18 +1,22 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import CustomerForm from '../components/forms/CustomerForm'
-import { createCustomer } from '../api/customersApi'
+import { useCustomerContext } from '../context/CustomerContext'
+import { useNotification } from '../context/NotificationContext'
 
 const AddCustomerPage = () => {
   const navigate = useNavigate()
   const [submitError, setSubmitError] = useState(null)
+  const { addCustomer } = useCustomerContext()
+  const { notify } = useNotification()
 
   const handleSubmit = async (formData) => {
     try {
       setSubmitError(null)
-      await createCustomer(formData)
+      await addCustomer(formData)
+      notify('Customer added successfully.')
       navigate('/customers')
-    } catch (err) {
+    } catch {
       setSubmitError('Failed to create customer. Please try again.')
     }
   }

@@ -33,9 +33,9 @@ public class CrmService
         await _crmDbContext.SaveChangesAsync();
     }
 
-    public async Task DeleteCustomer(Customer customer)
+    public async Task DeleteCustomer(int id)
     {
-        _crmDbContext.Customers.Remove(customer);
+        _crmDbContext.Customers.Remove(await GetCustomersById(id));
         await _crmDbContext.SaveChangesAsync();
     }
 }

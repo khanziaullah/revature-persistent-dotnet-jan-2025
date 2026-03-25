@@ -1,3 +1,6 @@
+// App.jsx — unchanged from Module 05
+// All state now lives in context providers above this component.
+
 import { Routes, Route, Navigate } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import CustomersPage from './pages/CustomersPage'
@@ -6,8 +9,6 @@ import AddCustomerPage from './pages/AddCustomerPage'
 import EditCustomerPage from './pages/EditCustomerPage'
 import './index.css'
 
-// App owns nothing — no customers state, no handlers.
-// Each page manages its own data lifecycle via useEffect + API calls.
 function App() {
   return (
     <div className="app">

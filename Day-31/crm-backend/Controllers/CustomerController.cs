@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/[controller]")]
-public class CustomerController : ControllerBase
+public class CustomersController : ControllerBase
 {
     CrmService crmService;
 
-    public CustomerController(CrmService crmService)
+    public CustomersController(CrmService crmService)
     {
         this.crmService = crmService;
 
@@ -21,23 +21,24 @@ public class CustomerController : ControllerBase
     public async Task<IActionResult> GetCustomerById(int id) =>
          Ok(await crmService.GetCustomersById(id));
 
-    // app.MapGet("/api/customers/{id}", async (int id) =>
-    // {
-    //     var crmService = app.Services.GetRequiredService<CrmService>();
-    //     return ;
-    // });
+    [HttpPost]
+    public async Task<IActionResult> AddCustomer([FromBody] Customer customer)
+    {
+        await crmService.AddCustomer(customer);
+        return Created();
+    }
 
-    // app.MapPost("/api/customer", () =>
-    // {
-    // });
+    [HttpPut]
+    public async Task<IActionResult> UpdateCustomer([FromBody] Customer customer)
+    {
+        await crmService.UpdateCustomer(customer);
+        return NoContent();
+    }
 
-    // app.MapPut("/api/customer", () =>
-    // {
-    // });
-
-    // app.MapDelete("/api/customer", (id) =>
-    // {
-    //     throw new NotImplementedException();
-    // });
-
+    [HttpDelete("id:int")]
+    public async Task<IActionResult> DeleteCustomer(int id)
+    {
+        await crmService.DeleteCustomer(id);
+        return NoContent();
+    }
 }

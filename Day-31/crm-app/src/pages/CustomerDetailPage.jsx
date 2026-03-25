@@ -1,59 +1,47 @@
-import { useState, useEffect } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import LoadingSpinner from '../components/LoadingSpinner'
 import ErrorMessage from '../components/ErrorMessage'
-import { getCustomer, updateCustomer, deleteCustomer } from '../api/customersApi'
+import { useCustomerContext } from '../context/CustomerContext'
+import { useNotification } from '../context/NotificationContext'
 
 const CustomerDetailPage = () => {
   const { id } = useParams()
   const navigate = useNavigate()
+  const { customers, loading, error, toggleActive, removeCustomer, refetch } = useCustomerContext()
+  const { notify } = useNotification()
 
-  const [customer, setCustomer] = useState(null)
-  const [loading, setLoading]   = useState(true)
-  const [error, setError]       = useState(null)
+  const customer = customers.find((c) => c.id === Number(id))
 
-  const fetchCustomer = async () => {
-    try {
-      setLoading(true)
-      setError(null)
-      const response = await getCustomer(id)
-      setCustomer(response.data)
-    } catch (err) {
-      setError('Failed to load customer. Please try again.')
-    } finally {
-      setLoading(false)
-    }
-  }
+  if (loading)   return <LoadingSpinner />
+  if (error)     return <ErrorMessage message={error} onRetry={refetch} />
+  if (!customer) return (
+    <div className="page-container">
+      <p className="empty-state">Customer not found.</p>
+      <Link to="/customers" className="back-link">← Back to customers</Link>
+    </div>
+  )
 
-  // Re-fetch whenever :id changes in the URL
-  useEffect(() => {
-    fetchCustomer()
-  }, [id])
+  const initials = customer.name.split(' ').map((p) => p[0]).join('').toUpperCase()
 
   const handleToggleActive = async () => {
     try {
-      await updateCustomer(id, { isActive: !customer.isActive })
-      fetchCustomer()
-    } catch (err) {
-      console.error('Failed to toggle status:', err)
+      await toggleActive(customer.id, customer.isActive)
+      notify('Customer status updated.')
+    } catch {
+      notify('Failed to update status.', 'error')
     }
   }
 
   const handleDelete = async () => {
-    if (!window.confirm(`Delete ${customer?.name}? This cannot be undone.`)) return
+    if (!window.confirm(`Delete ${customer.name}? This cannot be undone.`)) return
     try {
-      await deleteCustomer(id)
+      await removeCustomer(customer.id)
+      notify('Customer deleted.')
       navigate('/customers')
-    } catch (err) {
-      console.error('Failed to delete customer:', err)
+    } catch {
+      notify('Failed to delete customer.', 'error')
     }
   }
-
-  if (loading)   return <LoadingSpinner />
-  if (error)     return <ErrorMessage message={error} onRetry={fetchCustomer} />
-  if (!customer) return null
-
-  const initials = customer.name.split(' ').map((p) => p[0]).join('').toUpperCase()
 
   return (
     <div className="page-container">
@@ -64,7 +52,6 @@ const CustomerDetailPage = () => {
           <button className="btn-danger" onClick={handleDelete}>Delete</button>
         </div>
       </div>
-
       <div className="detail-card">
         <div className="detail-avatar">{initials}</div>
         <h2 className="detail-name">{customer.name}</h2>
@@ -75,7 +62,6 @@ const CustomerDetailPage = () => {
         >
           {customer.isActive ? 'Active' : 'Inactive'}
         </span>
-
         <div className="detail-fields">
           <div className="detail-field">
             <span className="detail-label">Email</span>
