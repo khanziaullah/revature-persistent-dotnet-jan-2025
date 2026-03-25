@@ -6,8 +6,8 @@ import axios from 'axios'
 
 const BASE_URL = 'http://localhost:5000/api'
 
-export const getCustomers   = ()         => axios.get(`${BASE_URL}/customers`)
-export const getCustomer    = (id)       => axios.get(`${BASE_URL}/customers/${id}`)
-export const createCustomer = (data)     => axios.post(`${BASE_URL}/customers`, data)
-export const updateCustomer = (id, data) => axios.put(`${BASE_URL}/customers/${id}`, data)
-export const deleteCustomer = (id)       => axios.delete(`${BASE_URL}/customers/${id}`)
+export const getCustomers   = ()         => axios.get(`${BASE_URL}/customer`)
+export const getCustomer    = (id)       => axios.get(`${BASE_URL}/customer/${id}`)
+export const createCustomer = (data)     => axios.post(`${BASE_URL}/customer`, data)
+export const updateCustomer = (id, data) => axios.put(`${BASE_URL}/customer/${id}`, data)
+export const deleteCustomer = (id)       => axios.delete(`${BASE_URL}/customer/${id}`)

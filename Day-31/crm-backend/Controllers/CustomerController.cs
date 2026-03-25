@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/[controller]")]
-public class CustomersController : ControllerBase
+public class CustomerController : ControllerBase
 {
     CrmService crmService;
 
-    public CustomersController(CrmService crmService)
+    public CustomerController(CrmService crmService)
     {
         this.crmService = crmService;
 
@@ -28,14 +28,14 @@ public class CustomersController : ControllerBase
         return Created();
     }
 
-    [HttpPut]
+    [HttpPut("{id:int}")]
     public async Task<IActionResult> UpdateCustomer([FromBody] Customer customer)
     {
         await crmService.UpdateCustomer(customer);
         return NoContent();
     }
 
-    [HttpDelete("id:int")]
+    [HttpDelete("{id:int}")]
     public async Task<IActionResult> DeleteCustomer(int id)
     {
         await crmService.DeleteCustomer(id);
