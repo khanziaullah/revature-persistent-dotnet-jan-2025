@@ -26,7 +26,7 @@ spec:
     spec:
       containers:
       - name: api
-        image: YOUR_DOCKERHUB_USERNAME/dotnet-api:1.0
+        image: zasmlabs/pulse-backend
         ports:
         - containerPort: 8080
         env:
