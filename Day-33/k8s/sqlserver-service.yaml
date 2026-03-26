@@ -1,0 +1,20 @@
+# ──────────────────────────────────────────────────────────────────
+# sqlserver-service.yaml
+# ClusterIP — SQL Server is only reachable from inside the cluster
+# The API connects using hostname: sqlserver-svc
+# ──────────────────────────────────────────────────────────────────
+apiVersion: v1
+kind: Service
+metadata:
+  name: sqlserver-svc
+  labels:
+    app: sqlserver
+spec:
+  type: ClusterIP           # internal only — not exposed outside the cluster
+  selector:
+    app: sqlserver
+  ports:
+  - name: sqlserver
+    protocol: TCP
+    port: 1433
+    targetPort: 1433

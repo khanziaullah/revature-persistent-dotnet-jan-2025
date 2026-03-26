@@ -1,0 +1,20 @@
+# ──────────────────────────────────────────────────────────────────
+# mongodb-service.yaml
+# ClusterIP — MongoDB is only reachable from inside the cluster
+# The API connects using hostname: mongodb-svc
+# ──────────────────────────────────────────────────────────────────
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-svc
+  labels:
+    app: mongodb
+spec:
+  type: ClusterIP
+  selector:
+    app: mongodb
+  ports:
+  - name: mongodb
+    protocol: TCP
+    port: 27017
+    targetPort: 27017

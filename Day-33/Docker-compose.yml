@@ -1,0 +1,28 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: crm-backend/Dockerfile
+    ports:
+      - "5000:8080"
+    volumes:
+      - C:/Data:/data
+    environment:
+      - DATABASE_URL=postgres://user:password@db:5432/database
+      - MACHINE_TYPE=local
+  db:
+    image: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=database
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+
+volumes:
+  db-data:
+
+
+  default:
+    driver: bridge

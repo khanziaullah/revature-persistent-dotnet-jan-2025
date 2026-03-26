@@ -1,0 +1,31 @@
+# ──────────────────────────────────────────────────────────────────
+# app-configmap.yaml
+# Non-sensitive application configuration
+# Injected into pods as environment variables via envFrom
+# ──────────────────────────────────────────────────────────────────
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  # ASP.NET Core
+  ASPNETCORE_ENVIRONMENT: "Production"
+  ASPNETCORE_URLS: "http://+:8080"
+  LOG_LEVEL: "Information"
+
+  # SQL Server
+  DB_NAME: "AppDatabase"
+  DB_SERVER: "sqlserver-svc"       # Kubernetes Service name = DNS hostname
+  DB_PORT: "1433"
+
+  # Redis
+  REDIS_HOST: "redis-svc"          # Kubernetes Service name
+  REDIS_PORT: "6379"
+
+  # MongoDB
+  MONGO_HOST: "mongodb-svc"        # Kubernetes Service name
+  MONGO_PORT: "27017"
+  MONGO_DB_NAME: "AppMongo"
+
+  # API base URL (used by the React UI if it needs to know where the API is)
+  API_BASE_URL: "http://dotnet-api-svc:5000"

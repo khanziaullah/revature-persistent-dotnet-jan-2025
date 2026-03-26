@@ -1,0 +1,20 @@
+# ──────────────────────────────────────────────────────────────────
+# api-service.yaml
+# Exposes the .NET 8 API via a LoadBalancer Service
+# On Docker Desktop, LoadBalancer maps to localhost automatically
+# ──────────────────────────────────────────────────────────────────
+apiVersion: v1
+kind: Service
+metadata:
+  name: dotnet-api-svc
+  labels:
+    app: dotnet-api
+spec:
+  type: LoadBalancer
+  selector:
+    app: dotnet-api           # routes traffic to pods with this label
+  ports:
+  - name: http
+    protocol: TCP
+    port: 5000                # port you hit from outside (localhost:5000)
+    targetPort: 8080          # port the container listens on

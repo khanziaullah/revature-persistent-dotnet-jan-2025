@@ -1,0 +1,20 @@
+# ──────────────────────────────────────────────────────────────────
+# redis-service.yaml
+# ClusterIP — Redis is only reachable from inside the cluster
+# The API connects using hostname: redis-svc
+# ──────────────────────────────────────────────────────────────────
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-svc
+  labels:
+    app: redis
+spec:
+  type: ClusterIP
+  selector:
+    app: redis
+  ports:
+  - name: redis
+    protocol: TCP
+    port: 6379
+    targetPort: 6379

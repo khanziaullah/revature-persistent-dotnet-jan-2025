@@ -1,0 +1,59 @@
+# ──────────────────────────────────────────────────────────────────
+# sqlserver-deployment.yaml
+# SQL Server 2019 on Kubernetes
+# Note: SQL Server requires at least 2GB memory to start
+# ──────────────────────────────────────────────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sqlserver
+  labels:
+    app: sqlserver
+spec:
+  replicas: 1             # SQL Server is stateful — single replica for dev
+  selector:
+    matchLabels:
+      app: sqlserver
+  template:
+    metadata:
+      labels:
+        app: sqlserver
+    spec:
+      containers:
+      - name: sqlserver
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        ports:
+        - containerPort: 1433
+        env:
+        - name: ACCEPT_EULA
+          value: "Y"
+        - name: MSSQL_PID
+          value: "Express"          # use Express edition (free)
+        - name: SA_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: SA_PASSWORD
+        resources:
+          requests:
+            memory: "2Gi"           # SQL Server minimum
+            cpu: "500m"
+          limits:
+            memory: "3Gi"
+            cpu: "1000m"
+        # SQL Server takes ~30-60s to be ready
+        readinessProbe:
+          exec:
+            command:
+            - /opt/mssql-tools/bin/sqlcmd
+            - -S
+            - localhost
+            - -U
+            - sa
+            - -P
+            - $(SA_PASSWORD)
+            - -Q
+            - "SELECT 1"
+          initialDelaySeconds: 30
+          periodSeconds: 15
+          failureThreshold: 5

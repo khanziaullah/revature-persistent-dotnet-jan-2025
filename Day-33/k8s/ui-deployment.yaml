@@ -1,0 +1,50 @@
+# ──────────────────────────────────────────────────────────────────
+# ui-deployment.yaml
+# Deploys the React 18 UI (served by nginx) as a K8s Deployment
+# Replace YOUR_DOCKERHUB_USERNAME before applying
+# ──────────────────────────────────────────────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: react-ui
+  labels:
+    app: react-ui
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: react-ui
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: react-ui
+    spec:
+      containers:
+      - name: ui
+        image: YOUR_DOCKERHUB_USERNAME/react-ui:1.0
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
+            memory: "128Mi"
+            cpu: "200m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 20
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 10
